@@ -109,13 +109,42 @@ describe("GET /api/v1/books/{bookId} endpoint", () => {
 
 describe("POST /api/v1/books endpoint", () => {
 	test("status code successfully 201 for saving a valid book", async () => {
+		// // Act
+		// const res = await request(app)
+		// 	.post("/api/v1/books")
+		// 	.send({ bookId: 3, title: "Fantastic Mr. Fox", author: "Roald Dahl" });
+
+		// // Assert
+		// expect(res.statusCode).toEqual(201);
+
+		//Arrange
+		const book = {
+			bookId: 3,
+			title: "Fantastic Mr. Fox",
+			author: "Roald Dahl",
+			description: "Mr Fox is an anthropomorphic, tricky, and clever fox ",
+		};
+
+		jest
+			.spyOn(bookService, "getBook")
+			.mockResolvedValue(undefined as unknown as Book);
 		// Act
 		const res = await request(app)
 			.post("/api/v1/books")
-			.send({ bookId: 3, title: "Fantastic Mr. Fox", author: "Roald Dahl" });
-
+			.send(book as Book);
 		// Assert
 		expect(res.statusCode).toEqual(201);
+	});
+	test("status code 400 when saving bookId that already exists", async () => {
+		jest
+			.spyOn(bookService, "getBook")
+			.mockResolvedValue(dummyBookData[1] as Book);
+		// Act
+		const res = await request(app)
+			.post("/api/v1/books")
+			.send(dummyBookData[1] as Book);
+		// Assert
+		expect(res.statusCode).toEqual(400);
 	});
 
 	test("status code 400 when saving ill formatted JSON", async () => {

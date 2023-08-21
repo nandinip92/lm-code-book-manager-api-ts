@@ -19,11 +19,24 @@ export const getBook = async (req: Request, res: Response) => {
 
 export const saveBook = async (req: Request, res: Response) => {
 	const bookToBeSaved = req.body;
+	// try {
+	// 	const book = await bookService.saveBook(bookToBeSaved);
+	// 	res.status(201).json(book);
+	// } catch (error) {
+	// 	res.status(400).json({ message: (error as Error).message });
+	// }
 	try {
+		const checkIfBookExists = await bookService.getBook(
+			Number(bookToBeSaved.bookId)
+		);
+		if (checkIfBookExists) {
+			throw new Error("BookId already exists. BookId must be unique");
+		}
 		const book = await bookService.saveBook(bookToBeSaved);
 		res.status(201).json(book);
 	} catch (error) {
 		res.status(400).json({ message: (error as Error).message });
+		//res.status(400).json({ error: error as Error });
 	}
 };
 
