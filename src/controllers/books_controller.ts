@@ -35,3 +35,19 @@ export const updateBook = async (req: Request, res: Response) => {
 	const book = await bookService.updateBook(bookId, bookUpdateData);
 	res.status(204).json(book);
 };
+
+//User Story 5 - Delete Book by Id Solution
+export const deleteBook = async (req: Request, res: Response) => {
+	const bookId = req.params.bookId;
+	try {
+		const book = await bookService.deleteBook(Number(bookId));
+		console.log("book--->", book);
+		if (book) {
+			res.json("Deleted successfully...!").status(200);
+		} else {
+			throw new Error("bookId Not Found");
+		}
+	} catch (error) {
+		res.status(400).json({ message: (error as Error).message });
+	}
+};

@@ -133,3 +133,27 @@ describe("POST /api/v1/books endpoint", () => {
 		expect(res.statusCode).toEqual(400);
 	});
 });
+
+//User Story 5 - Delete Book by Id Solution Test
+describe("DELETE /api/v1/books/{bookId} endpoint", () => {
+	test("status code 200 successfully deleted the given bookId", async () => {
+		// Arrange - we can enforce returning 1 by mocking the implementation
+		jest.spyOn(bookService, "deleteBook").mockResolvedValue(1);
+		//Act
+		const res = await request(app)
+			.delete("/api/v1/books/1")
+			.send("Deleted successfully...!");
+		//Assert
+		expect(res.statusCode).toEqual(200);
+	});
+
+	test("status code 400 when deleting a bookId which is not present", async () => {
+		// Arrange - we can enforce returning a 0 by mocking the implementation
+		jest.spyOn(bookService, "deleteBook").mockResolvedValue(0);
+
+		//Act
+		const res = await request(app).delete("/api/v1/books/4");
+		// Assert
+		expect(res.statusCode).toEqual(400);
+	});
+});
