@@ -169,11 +169,9 @@ describe("DELETE /api/v1/books/{bookId} endpoint", () => {
 		// Arrange - we can enforce returning 1 by mocking the implementation
 		jest.spyOn(bookService, "deleteBook").mockResolvedValue(1);
 		//Act
-		const res = await request(app)
-			.delete("/api/v1/books/1")
-			.send("Deleted successfully...!");
+		const res = await request(app).delete("/api/v1/books/1");
 		//Assert
-		expect(res.statusCode).toEqual(200);
+		expect(res.statusCode).toEqual(203);
 	});
 
 	test("status code 400 when deleting a bookId which is not present", async () => {
