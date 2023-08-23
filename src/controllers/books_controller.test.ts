@@ -127,7 +127,7 @@ describe("POST /api/v1/books endpoint", () => {
 
 		jest
 			.spyOn(bookService, "getBook")
-			.mockResolvedValue(undefined as unknown as Book);
+			.mockResolvedValue(null as unknown as Book);
 		// Act
 		const res = await request(app)
 			.post("/api/v1/books")
