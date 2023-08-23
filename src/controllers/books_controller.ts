@@ -29,13 +29,15 @@ export const saveBook = async (req: Request, res: Response) => {
 		const checkIfBookExists = await bookService.getBook(
 			Number(bookToBeSaved.bookId)
 		);
-		if (checkIfBookExists) {
-			throw new Error("BookId already exists. BookId must be unique");
+		if (checkIfBookExists !== null) {
+			throw new Error(
+				`Book ${bookToBeSaved.bookId} already exists. BookId must be unique`
+			);
 		}
 		const book = await bookService.saveBook(bookToBeSaved);
 		res.status(201).json(book);
 	} catch (error) {
-		res.status(400).json({ message: (error as Error).message });
+		res.status(400).json({ Error: (error as Error).message });
 		//res.status(400).json({ error: error as Error });
 	}
 };
@@ -54,12 +56,12 @@ export const deleteBook = async (req: Request, res: Response) => {
 	const bookId = req.params.bookId;
 	try {
 		const book = await bookService.deleteBook(Number(bookId));
-		if (book) {
-			res.json("Deleted successfully...!").status(200);
+		if (book === 1) {
+			res.status(200).json(`Book ${bookId} deleted successfully...!`);
 		} else {
-			throw new Error("bookId Not Found");
+			throw new Error(`Book ${bookId} Not Found`);
 		}
 	} catch (error) {
-		res.status(400).json({ message: (error as Error).message });
+		res.status(400).json({ Error: (error as Error).message });
 	}
 };
